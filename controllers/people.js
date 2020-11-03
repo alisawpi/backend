@@ -11,7 +11,7 @@ peopleRouter.get('/persons', (request, response) => {
 
 peopleRouter.get('/info', (req, res) => {
   Person.find({}).then(people => {
-    res.send(`<p> Phonebook has info for ${people.length} people</p><p> ${new Date()}</p>`)
+    res.send(`<p> Welcome to phonebook api! The phonebook has info for ${people.length} people</p><p> ${new Date()}</p>`)
   })
 })
 /*FIND PERSON BY ID*/
