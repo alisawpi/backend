@@ -1,8 +1,21 @@
+const app = require('./app')
+const http = require('http')
+const config = require('./utils/config')
+const logger = require('./utils/logger')
+
+const server = http.createServer(app)
+
+server.listen(config.PORT, () => {
+  logger.info(`Server running on port ${config.PORT}`)
+})
+/* OSAN 3 TOTEUTUS VANHA
 const express = require('express')
 var morgan = require('morgan')
 const cors = require('cors')
 require('dotenv').config()
 const Person = require('./models/person')
+const logger = require('./utils/logger')
+const config = require('./utils/config')
 
 const app = express()
 app.use(express.static('build'))
@@ -64,7 +77,7 @@ app.post('/api/persons', (req, response, next) => {
 
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
-  if (body.name === undefined || body.number === undefined){
+  if (body.name === undefined || body.number === undefined) {
     response.status(400).json({ error: 'Fill out all of the fields!' }).end()
   } else {
     const updatePerson = {
@@ -72,15 +85,16 @@ app.put('/api/persons/:id', (request, response, next) => {
       number: body.number
     }
     console.log(request.params.id)
-    Person.findByIdAndUpdate(request.params.id, updatePerson, { new:true })
+    Person.findByIdAndUpdate(request.params.id, updatePerson, { new: true })
       .then(updatedPerson => {
         response.json(updatedPerson)
       })
       .catch(error => next(error))
   }
 })
+*/
 
-/**ERROR HANDLING */
+/**ERROR HANDLING
 const errorHandler = (error, request, response, next) => {
   console.log('here')
   console.error(error.message)
@@ -94,7 +108,7 @@ const errorHandler = (error, request, response, next) => {
 app.use(errorHandler)
 
 // eslint-disable-next-line no-undef
-const PORT = process.env.PORT
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+
+app.listen(config.PORT, () => {
+  logger.info(`Server running on port ${config.PORT}`)
+})*/
