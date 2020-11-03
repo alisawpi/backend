@@ -1,8 +1,10 @@
+/* eslint-disable no-undef */
 const mongoose = require('mongoose')
 
+
 if (process.argv.length < 3) {
-    console.log('Missing arguments')
-    process.exit(1)
+  console.log('Missing arguments')
+  process.exit(1)
 }
 
 const password = process.argv[2]
@@ -16,31 +18,33 @@ const url =
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
 const personSchema = new mongoose.Schema({
-    id: Number,
-    name: String,
-    phoneNumber: String
+  id: Number,
+  name: String,
+  phoneNumber: String
 })
 
 const Person = mongoose.model('Person', personSchema)
 
 const person = new Person({
-    id: Math.round(Math.random() * (1000 - 10) + 10), //range (1000,10), first 10 ids reserved for manual insertion during testing
-    name: newName,
-    phoneNumber: newNumber
+  id: Math.round(Math.random() * (1000 - 10) + 10), //range (1000,10), first 10 ids reserved for manual insertion during testing
+  name: newName,
+  phoneNumber: newNumber
 })
 
 if (newName !== undefined && newNumber !== undefined) {
-    person.save()
-    .then(response => {
-        console.log(`added ${newName} number ${newNumber} to phonebook`)
-        mongoose.connection.close()})
+  person.save()
+    .then(() => {
+      console.log(`added ${newName} number ${newNumber} to phonebook`)
+      mongoose.connection.close()
+    })
     .catch(err => console.log(err))
-   
+
 } else {
-    Person.find({}).then(result => {
+  Person.find({}).then(result => {
     result.forEach(p => {
-        console.log(p)
+      console.log(p)
     })
     mongoose.connection.close()
-    
-})}
+
+  })
+}

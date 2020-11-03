@@ -1,17 +1,15 @@
 const express = require('express')
 var morgan = require('morgan')
 const cors = require('cors')
-const mongoose = require('mongoose')
 require('dotenv').config()
-const { response } = require('express')
 const Person = require('./models/person')
 
 const app = express()
 app.use(express.static('build'))
 app.use(express.json())
-//app.use(logger) what logger? 
+//app.use(logger) what logger?
 app.use(cors())
-morgan.token('body', function (req, res) { return `body: ${JSON.stringify(req.body)}` })
+morgan.token('body', function (req) { return `body: ${JSON.stringify(req.body)}` })
 app.use(morgan(function (tokens, req, res) {
   return [
     tokens.method(req, res),
@@ -47,7 +45,7 @@ app.get('/api/persons/:id', (req, res, next) => {
 
 app.delete('/api/persons/:id', (req, response, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then(res => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -60,31 +58,31 @@ app.post('/api/persons', (req, response, next) => {
     number: body.number
   })
   person.save()
-  .then(savedPerson => response.json(savedPerson))
-  .catch(error => next(error))
+    .then(savedPerson => response.json(savedPerson))
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
   if (body.name === undefined || body.number === undefined){
-    response.status(400).json({error: "Fill out all of the fields!"}).end()
+    response.status(400).json({ error: 'Fill out all of the fields!' }).end()
   } else {
     const updatePerson = {
-      name: body.name, 
+      name: body.name,
       number: body.number
     }
     console.log(request.params.id)
-    Person.findByIdAndUpdate(request.params.id, updatePerson, {new:true})
-    .then(updatedPerson => {
-      response.json(updatedPerson)
-    })
-    .catch(error => next(error))
+    Person.findByIdAndUpdate(request.params.id, updatePerson, { new:true })
+      .then(updatedPerson => {
+        response.json(updatedPerson)
+      })
+      .catch(error => next(error))
   }
 })
 
 /**ERROR HANDLING */
 const errorHandler = (error, request, response, next) => {
-  console.log("here")
+  console.log('here')
   console.error(error.message)
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
@@ -95,6 +93,7 @@ const errorHandler = (error, request, response, next) => {
 }
 app.use(errorHandler)
 
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
