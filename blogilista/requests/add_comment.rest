@@ -1,0 +1,6 @@
+POST http://localhost:3001/api/blogs/5fac23ce29ee371e50e9ae21/comments 
+content-type: application/json
+
+{
+    "comment": "eka"
+}
