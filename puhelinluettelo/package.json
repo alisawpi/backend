@@ -21,10 +21,10 @@
     "express": "^4.17.1",
     "mongoose": "^5.10.11",
     "mongoose-unique-validator": "^2.0.3",
+    "cross-env": "^7.0.2",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "cross-env": "^7.0.2",
     "eslint": "^7.12.1",
     "jest": "^26.6.2",
     "nodemon": "^2.0.6",
