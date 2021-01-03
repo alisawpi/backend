@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node index.js",
+    "start": "node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "build:ui": "rm -rf build && cd ../fullstack2020/Osa3/puhelinluettelo && npm run build --prod && cp -r build ../../../backend/build",
     "deploy": "git push heroku master",
