@@ -16,7 +16,6 @@
   "author": "Alisa",
   "license": "MIT",
   "dependencies": {
-    "apollo-link-context": "^1.0.20",
     "apollo-server": "^2.19.0",
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
