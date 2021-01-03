@@ -75,6 +75,7 @@ const typeDefs = gql`
       password: String!
     ): Token
   }
+
   type Subscription {
     bookAdded: Book!
   } 
@@ -102,12 +103,6 @@ const resolvers = {
       return context.currentUser
     }
   },
-  Author: {
-    bookCount: async (root) => {
-      let books = await Book.find({ author: root.id })
-      return books.length
-    }
-  },
   Book: {
     author: (root) => {
       let res = Author.findById(root.author)
@@ -121,7 +116,7 @@ const resolvers = {
       }
       const existingAuthor = await Author.findOne({ name: args.author })
       if (!existingAuthor) {
-        const author = new Author({ name: args.author })
+        const author = new Author({ name: args.author, bookCount: 1 })
         const book = new Book({ ...args, author: author })
         try {
           await author.save()
@@ -131,10 +126,13 @@ const resolvers = {
             invalidArgs: args,
           })
         }
+        pubsub.publish('BOOK_ADDED', { bookAdded: book })
         return book
       } else {
+        existingAuthor.bookCount += 1
         const book = new Book({ ...args, author: existingAuthor })
         try {
+          await existingAuthor.save()
           await book.save()
         } catch (error) {
           throw new UserInputError(error.message, {
@@ -188,12 +186,12 @@ const resolvers = {
       }
 
       return { value: jwt.sign(userForToken, JWT_SECRET) }
-    },
-    Subscription: {
-      bookAdded: {
-        subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
-      },
     }
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+    },
   }
 }
 
