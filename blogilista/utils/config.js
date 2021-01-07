@@ -5,6 +5,7 @@ let MONGODB_URI_BLOG = process.env.MONGODB_URI_BLOG
 let PORT = process.env.PORT
 
 if (process.env.NODE_ENV === 'test') {
+  console.log('test db')
   MONGODB_URI_BLOG = process.env.TEST_MONGODB_URI
 }
 
